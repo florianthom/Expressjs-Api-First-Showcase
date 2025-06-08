@@ -1,0 +1,113 @@
+openapi: 3.0.3
+info:
+  title: Articles Api
+  version: 1.0.0
+servers:
+- url: http://localhost:8080
+tags:
+- description: Everything about your Articles
+  name: articles
+paths:
+  /api/v1/articles:
+    get:
+      description: Returns user by id
+      operationId: getArticles
+      parameters:
+      - description: Input the id of the article you want to get
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+          description: OK
+        default:
+          description: Unexpected Error
+      tags:
+      - articles
+      x-eov-operation-handler: controllers/ArticlesController
+components:
+  schemas:
+    PaginationFilter:
+      properties:
+        pageSize:
+          default: 10
+          format: int32
+          type: integer
+        pageNumber:
+          default: 0
+          format: int32
+          type: integer
+      type: object
+    PageInfo:
+      properties:
+        pageSize:
+          format: int32
+          type: integer
+        pageNumber:
+          description: "First page number: 0"
+          format: int32
+          type: integer
+        previousPage:
+          description: Null if no previous page available
+          format: uri
+          type: string
+        nextPage:
+          description: Null if no next page available
+          format: uri
+          type: string
+        itemsTotal:
+          format: int64
+          type: integer
+        pagesTotal:
+          format: int32
+          type: integer
+      type: object
+    Article:
+      example:
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        updatedBy: updatedBy
+        deleted: true
+        createdBy: createdBy
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        createdAt:
+          format: date-time
+          type: string
+        createdBy:
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        updatedBy:
+          type: string
+        id:
+          format: uuid
+          type: string
+        deleted:
+          type: boolean
+      type: object
+    ArticleQueryFilter:
+      properties:
+        userId:
+          format: uuid
+          type: string
+      type: object
+    PageUserList:
+      allOf:
+      - $ref: '#/components/schemas/PageInfo'
+      - properties:
+          data:
+            items:
+              $ref: '#/components/schemas/Article'
+            type: array
+        type: object
