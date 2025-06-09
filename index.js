@@ -1,7 +1,8 @@
 import express from 'express';
-// const generatedApp = require('../api-eafs/generated-server');
-// const myUsersController = require('./controller/users');
 import {articlesRouter} from './src/routes/articles-routes.js'
+import ExpressServer from './api-eafs/generated-server/expressServer.js';
+import './src/controller/articles-controller.js';
+
 
 const port = 3000
 const app = express();
@@ -10,24 +11,11 @@ app.use(express.json());
 // https://github.com/goldbergyoni/nodebestpractices
 // https://github.com/practicajs/practica
 
+const apiServer = new ExpressServer(-1, "./api-eafs/generated-server/api/openapi.yaml");
 
-
-//  // 1. Monkey patch the controller methods before use:
-// const usersController = require('../generated/controllers/UsersController');
-// usersController.getUsers = (req, res, next) => {
-//   try {
-//     const result = myUsersController.getUsers();
-//     res.json(result);
-//   } catch (err) {
-//     next(err);
-//   }
-// };
-
-
-
-// app.use(generatedApp);
 app.use("/", articlesRouter)
+app.use("/", apiServer.app)
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Article app listening on port ${port}`)
 })

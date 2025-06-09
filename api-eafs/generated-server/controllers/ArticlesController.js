@@ -8,11 +8,11 @@
 
 const Controller = require('./Controller');
 const service = require('../services/ArticlesService');
-const getArticles = async (request, response) => {
-  await Controller.handleRequest(request, response, service.getArticles);
+const getAllArticle = async (request, response) => {
+  await Controller.handleRequest(request, response, service.getAllArticle);
 };
 
 
 module.exports = {
-  getArticles,
+  getAllArticle,
 };

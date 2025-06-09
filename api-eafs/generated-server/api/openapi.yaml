@@ -6,33 +6,38 @@ servers:
 - url: http://localhost:8080
 tags:
 - description: Everything about your Articles
-  name: articles
+  name: Articles
 paths:
   /api/v1/articles:
     get:
-      description: Returns user by id
-      operationId: getArticles
+      description: Returns all articles
+      operationId: getAllArticle
       parameters:
-      - description: Input the id of the article you want to get
-        explode: false
-        in: path
-        name: id
-        required: true
+      - explode: true
+        in: query
+        name: articleQueryFilterDto
+        required: false
         schema:
-          format: uuid
-          type: string
-        style: simple
+          $ref: '#/components/schemas/ArticleQueryFilter'
+        style: form
+      - explode: true
+        in: query
+        name: paginationFilterDto
+        required: false
+        schema:
+          $ref: '#/components/schemas/PaginationFilter'
+        style: form
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Article'
+                $ref: '#/components/schemas/PageArticleList'
           description: OK
         default:
           description: Unexpected Error
       tags:
-      - articles
+      - Articles
       x-eov-operation-handler: controllers/ArticlesController
 components:
   schemas:
@@ -98,11 +103,11 @@ components:
       type: object
     ArticleQueryFilter:
       properties:
-        userId:
+        articleId:
           format: uuid
           type: string
       type: object
-    PageUserList:
+    PageArticleList:
       allOf:
       - $ref: '#/components/schemas/PageInfo'
       - properties:
@@ -111,3 +116,23 @@ components:
               $ref: '#/components/schemas/Article'
             type: array
         type: object
+      example:
+        pageNumber: 6
+        previousPage: https://openapi-generator.tech
+        itemsTotal: 1
+        data:
+        - createdAt: 2000-01-23T04:56:07.000+00:00
+          updatedBy: updatedBy
+          deleted: true
+          createdBy: createdBy
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          updatedAt: 2000-01-23T04:56:07.000+00:00
+        - createdAt: 2000-01-23T04:56:07.000+00:00
+          updatedBy: updatedBy
+          deleted: true
+          createdBy: createdBy
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          updatedAt: 2000-01-23T04:56:07.000+00:00
+        nextPage: https://openapi-generator.tech
+        pageSize: 0
+        pagesTotal: 5

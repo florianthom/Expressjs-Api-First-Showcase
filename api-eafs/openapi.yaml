@@ -5,31 +5,32 @@ info:
 servers:
   - url: http://localhost:8080
 tags:
-  - name: articles
+  - name: Articles
     description: Everything about your Articles
 
 paths:
   /api/v1/articles:
     get:
-      description: 'Returns user by id'
+      description: "Returns all articles"
       tags:
-        - articles
-      operationId: 'getArticles'
+        - Articles
+      operationId: "getAllArticle"
       parameters:
-        - name: id
-          in: path
-          required: true
-          description: Input the id of the article you want to get
+        - name: articleQueryFilterDto
+          in: query
           schema:
-            type: string
-            format: uuid
+            $ref: "#/components/schemas/ArticleQueryFilter"
+        - name: paginationFilterDto
+          in: query
+          schema:
+            $ref: "#/components/schemas/PaginationFilter"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Article'
+                $ref: "#/components/schemas/PageArticleList"
         default:
           description: 'Unexpected Error'
 
@@ -91,11 +92,11 @@ components:
     ArticleQueryFilter:
       type: object
       properties:
-        userId:
+        articleId:
           type: string
           format: uuid
           default: null
-    PageUserList:
+    PageArticleList:
       allOf:
         - $ref: '#/components/schemas/PageInfo'
         - type: object

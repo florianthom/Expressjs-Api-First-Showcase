@@ -2,17 +2,23 @@
 const Service = require('./Service');
 
 /**
-* Returns user by id
+* Returns all articles
 *
-* id UUID Input the id of the article you want to get
-* returns Article
+* articleQueryFilterDto ArticleQueryFilter  (optional)
+* paginationFilterDto PaginationFilter  (optional)
+* returns PageArticleList
 * */
-const getArticles = ({ id }) => new Promise(
+const getAllArticle = ({ articleQueryFilterDto, paginationFilterDto }) => new Promise(
   async (resolve, reject) => {
     try {
-      resolve(Service.successResponse({
-        id,
-      }));
+
+      const article = {
+        id: 1,
+        title: 'Sample Article',
+        title2: "sadf"
+      };
+
+      resolve(Service.successResponse([article]));
     } catch (e) {
       reject(Service.rejectResponse(
         e.message || 'Invalid input',
@@ -23,5 +29,5 @@ const getArticles = ({ id }) => new Promise(
 );
 
 module.exports = {
-  getArticles,
+  getAllArticle,
 };
