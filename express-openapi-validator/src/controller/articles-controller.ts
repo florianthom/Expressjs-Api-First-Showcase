@@ -2,29 +2,18 @@ import { Request, Response, NextFunction } from 'express';
 import * as articlesService from "../services/articles-service.js"
 import {PageArticleList, ArticleQueryFilter, PaginationFilter, operations} from "../../api/generated/types/openapi.js"
 
-type GetAllArticleOp = operations["getAllArticle"];
-type GetAllArticleQuery = GetAllArticleOp["parameters"]["query"];
-type GetAllArticleResponse = GetAllArticleOp["responses"]["200"]["content"]["application/json"];
+// type GetAllArticleOp = operations["getAllArticle"];
+// type GetAllArticleQuery = GetAllArticleOp["parameters"]["query"];
+// type GetAllArticleResponse = GetAllArticleOp["responses"]["200"]["content"]["application/json"];
 
-
-type OperationWithResponses = {
-  responses: Record<any, any>
-};
-
-type SuccessStatusCode<T extends OperationWithResponses> = Extract<
-  keyof T["responses"],
-  "200" | "201" | "202" | "203" | "204"
->;
-
-type JsonResponseContent<T extends OperationWithResponses> =
-  T["responses"][SuccessStatusCode<T>]["content"]["application/json"];
-
+type JsonResponse<T> = T extends { content: { "application/json": infer R } } ? R : never;
+type JsonResponseUnion<T> = { [K in keyof T]: JsonResponse<T[K]>}[keyof T];
 
 export type OperationHandler<operationId extends keyof operations> = (
-    req:  Request<{}, operations[operationId]["responses"][200]["content"]["application/json"], {}, operations["getAllArticle"]["parameters"]["query"]>,
-    res: Response<operations[operationId]["responses"][200]["content"]["application/json"]>,
+    req:  Request<{}, JsonResponseUnion<operations[operationId]["responses"]>, {}, operations[operationId]["parameters"]["query"]>,
+    res: Response<JsonResponseUnion<operations[operationId]["responses"]>>,
     next: NextFunction
-) => Promise<Response<operations["getAllArticle"]["responses"]["200"]["content"]["application/json"]>>;
+) => Promise<Response<JsonResponseUnion<operations[operationId]["responses"]>>>;
 
 export const getAllArticle: OperationHandler<"getAllArticle"> = async (req, res, next) => {
     return res.json(await articlesService.getAllArticle(
@@ -33,8 +22,3 @@ export const getAllArticle: OperationHandler<"getAllArticle"> = async (req, res,
         req.query?.paginationFilterDto?.pageNumber)
     );
 }
-
-
- Promise<Response<GetAllArticleResponse>> 
-
-
