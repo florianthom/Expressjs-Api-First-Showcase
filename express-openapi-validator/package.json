@@ -1,10 +1,10 @@
 {
   "name": "express-openapi-validator",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsx watch src/index.ts",
+     "generatetypes": "openapi-typescript api/openapi.yaml --output api/generated/types/openapi.d.ts --export-type true --root-types true --root-types-no-schema-prefix true"
   },
   "author": "",
   "license": "ISC",
@@ -12,9 +12,13 @@
   "type": "module",
   "dependencies": {
     "express": "^5.1.0",
-    "express-openapi-validator": "^5.5.7"
+    "express-openapi-validator": "^5.5.7",
+    "openapi-typescript": "^7.8.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "@types/node": "^24.0.1",
+    "nodemon": "^3.1.10",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
   }
 }
