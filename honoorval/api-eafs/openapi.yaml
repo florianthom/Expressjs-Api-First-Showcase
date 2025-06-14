@@ -1,0 +1,107 @@
+openapi: 3.0.3
+info:
+  title: Articles Api
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: Articles
+    description: Everything about your Articles
+
+paths:
+  /api/v1/articles:
+    get:
+      description: "Returns all articles"
+      tags:
+        - Articles
+      operationId: "getAllArticle"
+      parameters:
+        - name: articleQueryFilterDto
+          in: query
+          schema:
+            $ref: "#/components/schemas/ArticleQueryFilter"
+        - name: paginationFilterDto
+          in: query
+          schema:
+            $ref: "#/components/schemas/PaginationFilter"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PageArticleList"
+        default:
+          description: 'Unexpected Error'
+
+components:
+  schemas:
+    PaginationFilter:
+      type: object
+      properties:
+        pageSize:
+          type: integer
+          format: int32
+          default: 10
+        pageNumber:
+          type: integer
+          format: int32
+          default: 0
+    PageInfo:
+      type: object
+      properties:
+        pageSize:
+          type: integer
+          format: int32
+        pageNumber:
+          description: 'First page number: 0'
+          type: integer
+          format: int32
+        previousPage:
+          type: string
+          format: uri
+          description: 'Null if no previous page available'
+        nextPage:
+          type: string
+          format: uri
+          description: 'Null if no next page available'
+        itemsTotal:
+          type: integer
+          format: int64
+        pagesTotal:
+          type: integer
+          format: int32
+    Article:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        id:
+          type: string
+          format: uuid
+        deleted:
+          type: boolean
+    ArticleQueryFilter:
+      type: object
+      properties:
+        articleId:
+          type: string
+          format: uuid
+          default: null
+    PageArticleList:
+      allOf:
+        - $ref: '#/components/schemas/PageInfo'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Article'

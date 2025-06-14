@@ -1,0 +1,11 @@
+.openapi-generator-ignore
+apis/ArticlesApi.ts
+apis/index.ts
+index.ts
+models/Article.ts
+models/ArticleQueryFilter.ts
+models/PageArticleList.ts
+models/PageInfo.ts
+models/PaginationFilter.ts
+models/index.ts
+runtime.ts

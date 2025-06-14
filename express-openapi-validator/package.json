@@ -1,0 +1,20 @@
+{
+  "name": "express-openapi-validator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "module",
+  "dependencies": {
+    "express": "^5.1.0",
+    "express-openapi-validator": "^5.5.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
